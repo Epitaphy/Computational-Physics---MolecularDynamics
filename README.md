@@ -6,3 +6,4 @@ Project for Computational Physics
 2. Checkpoints einlesen/plotten
 3. Überprüfung Lennard-Jones
 4. Alpha-Goldteilchen.
+5. Verlet überprüfen
