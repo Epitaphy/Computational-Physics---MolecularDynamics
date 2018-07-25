@@ -1,0 +1,67 @@
+
+
+
+
+Note:
+  Basically it is the same class as matplotlib.animation.FuncAnimation.
+  The difference is the local figure which is passed to the plotting function,
+  and methods to show the movie or save it with some default argsuments.
+"""
+import numpy as np
+import sys
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+class Movie(animation.FuncAnimation):
+    """Movie object
+
+    Args:
+      func (function): function to create (takes at least 2 args
+                                           first=iterator
+                                           second=figure (self.fig))
+    """
+    def __init__(self,func,fargs=None,**kwargs):
+        self.fig = plt.figure()
+
+        funcArgs = (self.fig,)
+        if fargs is not None:
+            funcArgs += fargs
+        super(Movie, self).__init__(self.fig,func,fargs=funcArgs,**kwargs)
+
+    def show(self):
+        plt.show()
+
+    def save(self,moviename,fps=30,**kwargs):
+
+        super(Movie, self).save(moviename,writer='mencoder',
+                                extra_args=['-really-quiet'],
+                                fps=fps,**kwargs)
+
+def animateFig(frameCounter,fig):
+    # get data
+
+    # load datasets saved from dynamics.py, append all to
+    new_positions = np.zeros((200,100,2))
+    print(new_positions.shape)
+    for i in range(4000):
+        if i%20==0:
+            position = np.load("./checkpoints/EDLr1_%i.npy" %i)
+            new_positions[i/20] = position
+
+    x = new_positions[:,:,0]
+    y = new_positions[:,:,1]
+
+    # draw figure
+    fig.clf()
+    ax = fig.gca(xlim=(0,80),ylim=(0,80))
+
+    # specify plot behavior
+    ax.text(0.02,0.95,'n={n:d}'.format(n=frameCounter), transform=ax.transAxes)
+    ax.plot(x,y,"or")
+
+    return fig
+
+
+
+testAnimation = Movie(animateFig,frames=200)
+testAnimation.show()
