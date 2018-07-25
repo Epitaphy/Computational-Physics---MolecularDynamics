@@ -88,3 +88,24 @@ for i in range(4000):
     if i % 20 == 0:
         np.save('./checkpoints_heated/EDL_heated_r%i.npy' %i, rMatrix)
         np.save('./checkpoints_heated/EDL_heated_v%i.npy' %i, rMatrix)
+        
+        limit_x = 200
+        limit_y = 200
+
+
+        radius = 1
+
+        x = (initCoords*2)
+        x = (initCoords * 2) % limit_x + radius
+        y = (initCoords * 2) / limit_x + radius
+        position = np.column_stack((x, y))
+    
+
+            #position = getForce(initCoords, 2)
+            #velocity = getForce(initCoords, 2)
+
+
+        x = position[:,0]
+        y = position[:,1]
+        plt.plot(x, y, 'ro')
+        plt.show()
